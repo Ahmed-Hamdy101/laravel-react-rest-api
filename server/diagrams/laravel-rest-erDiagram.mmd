@@ -1,0 +1,78 @@
+erDiagram
+    USERS ||--o{ ROLES : "belongs_to"
+    USERS ||--o{ ORDERS : "creates"
+    ROLES ||--o{ PERMISSIONS : "has_many"
+    PRODUCTS ||--o{ ORDER_ITEMS : "belongs_to"
+    ORDERS ||--o{ ORDER_ITEMS : "has_many"
+    USERS ||--o{ OAUTH_ACCESS_TOKENS : "owns"
+    
+    USERS {
+        bigint id PK
+        string name
+        string email UK
+        string password
+        bigint role_id FK
+        timestamp email_verified_at
+        string remember_token
+        timestamp created_at
+        timestamp updated_at
+    }
+    
+    ROLES {
+        bigint id PK
+        string name UK
+        text description
+        timestamp created_at
+        timestamp updated_at
+    }
+    
+    PERMISSIONS {
+        bigint id PK
+        string name UK
+        text description
+        timestamp created_at
+        timestamp updated_at
+    }
+    
+    PRODUCTS {
+        bigint id PK
+        string title
+        text description
+        decimal price "decimal(10,2)"
+        string image_path
+        timestamp created_at
+        timestamp updated_at
+    }
+    
+    ORDERS {
+        bigint id PK
+        bigint user_id FK
+        string first_name
+        string last_name
+        string email
+        decimal total_price "decimal(12,2)"
+        string status "pending|completed|cancelled"
+        timestamp created_at
+        timestamp updated_at
+    }
+    
+    ORDER_ITEMS {
+        bigint id PK
+        bigint order_id FK
+        bigint product_id FK
+        integer quantity
+        decimal price "decimal(10,2)"
+        timestamp created_at
+        timestamp updated_at
+    }
+    
+    OAUTH_ACCESS_TOKENS {
+        string id PK
+        bigint user_id FK
+        string client_id FK
+        text scopes
+        boolean revoked
+        timestamp created_at
+        timestamp updated_at
+        timestamp expires_at
+    }

@@ -1,0 +1,42 @@
+sequenceDiagram
+    participant Client as Client Application
+    participant API as API Server
+    participant Auth as AuthController
+    participant Passport as Passport OAuth2
+    participant DB as Database
+    participant Middleware as Auth Middleware
+    
+    rect rgb(200, 150, 255)
+    Note over Client,DB: Login Process
+    Client->>API: POST /api/v1/login (email, password)
+    API->>Auth: Handle login request
+    Auth->>DB: Verify user credentials
+    DB-->>Auth: User found ✓
+    Auth->>Passport: Generate OAuth2 Token
+    Passport->>DB: Store access_token
+    Passport-->>Auth: Return JWT token
+    Auth-->>Client: HTTP 200 + access_token
+    end
+    
+    rect rgb(150, 200, 255)
+    Note over Client,DB: Protected Request
+    Client->>API: GET /api/v1/profile<br/>Header: Authorization: Bearer {token}
+    API->>Middleware: Validate token
+    Middleware->>Passport: Verify token signature & expiry
+    Passport->>DB: Check token validity
+    DB-->>Passport: Token valid ✓
+    Passport-->>Middleware: Token verified
+    Middleware->>Auth: Extract user from token
+    Auth-->>API: User ID: 1, Role: admin
+    API-->>Client: HTTP 200 + User Profile
+    end
+    
+    rect rgb(200, 200, 150)
+    Note over Client,DB: Role-Based Access
+    Client->>API: POST /api/v1/users<br/>Header: Authorization: Bearer {token}
+    API->>Middleware: Check Role
+    Middleware->>DB: Get user role
+    DB-->>Middleware: Role: admin ✓
+    Middleware-->>API: Access Allowed
+    API-->>Client: HTTP 200 + Users List
+    end

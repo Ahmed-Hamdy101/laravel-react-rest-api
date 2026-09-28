@@ -1,0 +1,35 @@
+graph TD
+    API["🔗 API v1<br/>/api/v1"]
+    
+    subgraph Public["PUBLIC ENDPOINTS<br/>(No Authentication)"]
+        Login["POST /login<br/>@AuthController.login"]
+        Register["POST /register<br/>@AuthController.register"]
+    end
+    
+    subgraph Auth["AUTHENTICATED ENDPOINTS<br/>(Requires Token)"]
+        Logout["POST /logout<br/>@AuthController.logout"]
+        Profile["GET /profile<br/>@AuthController.profile"]
+        Orders["GET /orders<br/>@OrderController.index"]
+        OrdersExport["GET /orders/export<br/>@OrderController.export"]
+        Charts["GET /chart<br/>@DashboardController.chart"]
+    end
+    
+    subgraph Admin["ADMIN ONLY<br/>(Role: admin)"]
+        Users["GET|POST /users<br/>@UserController"]
+        Roles["GET|POST /roles<br/>@RoleController"]
+    end
+    
+    subgraph AdminEditor["ADMIN & EDITOR<br/>(Role: admin|editor)"]
+        Products["GET|POST /products<br/>@ProductController"]
+        Upload["POST /uploads<br/>@ImageController.upload"]
+    end
+    
+    API --> Public
+    API --> Auth
+    API --> Admin
+    API --> AdminEditor
+    
+    style Public fill:#c8e6c9
+    style Auth fill:#bbdefb
+    style Admin fill:#ffccbc
+    style AdminEditor fill:#ffe0b2

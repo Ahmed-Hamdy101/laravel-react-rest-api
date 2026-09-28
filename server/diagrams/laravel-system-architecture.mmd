@@ -1,0 +1,42 @@
+graph TB
+    Client["🖥️ Client Applications<br/>(Web/Mobile)"]
+    
+    subgraph API["API Layer"]
+        Router["Router<br/>api.php"]
+        Middleware["Middleware<br/>(Auth, CORS, Rate Limit)"]
+        Controller["Controllers<br/>(9 Controllers)"]
+        Request["Request Validation<br/>(FormRequest)"]
+        Resource["Resource Layer<br/>(API Transformers)"]
+    end
+    
+    subgraph Business["Business Logic Layer"]
+        Model["Models<br/>(6 Models)"]
+        Service["Services<br/>(Auth, Order, CSV)"]
+        Rule["Authorization<br/>(Policies, Roles)"]
+    end
+    
+    subgraph Data["Data Layer"]
+        DB["MySQL Database"]
+        Cache["Redis Cache<br/>(Sessions, Cache)"]
+        Storage["Laravel Storage<br/>(Images)"]
+    end
+    
+    External["External Services<br/>(Passport OAuth2)"]
+    
+    Client -->|HTTP/REST| Router
+    Router --> Middleware
+    Middleware --> Controller
+    Controller --> Request
+    Request --> Resource
+    Resource --> Model
+    Model --> Service
+    Service --> Rule
+    Rule --> DB
+    Rule --> Cache
+    Rule --> Storage
+    Service --> External
+    
+    style API fill:#e1f5ff
+    style Business fill:#f3e5f5
+    style Data fill:#e8f5e9
+    style External fill:#fff3e0

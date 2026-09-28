@@ -1,0 +1,45 @@
+graph TB
+    subgraph Backend["Backend - Laravel 10.x"]
+        LARAVEL["Laravel Framework"]
+        PASSPORT["Passport OAuth2"]
+        SPATIE["Spatie Permissions"]
+        STORAGE["Laravel Storage"]
+        ELOQUENT["Eloquent ORM"]
+    end
+    
+    subgraph Database["Data Layer"]
+        MYSQL["MySQL 8.0+"]
+        REDIS["Redis<br/>(Sessions, Cache)"]
+    end
+    
+    subgraph Deployment["Deployment"]
+        DOCKER["Docker"]
+        PHP["PHP 8.4 FPM"]
+        APACHE["Apache 2.4"]
+    end
+    
+    subgraph Tools["Developer Tools"]
+        PHPUNIT["PHPUnit<br/>(Testing)"]
+        PHPSTAN["PHPStan<br/>(Analysis)"]
+        PINT["Pint<br/>(Style)"]
+    end
+    
+    LARAVEL --> PASSPORT
+    LARAVEL --> SPATIE
+    LARAVEL --> ELOQUENT
+    ELOQUENT --> MYSQL
+    LARAVEL --> REDIS
+    
+    PHP --> LARAVEL
+    APACHE --> PHP
+    DOCKER --> Backend
+    DOCKER --> Database
+    
+    Backend --> PHPUNIT
+    Backend --> PHPSTAN
+    Backend --> PINT
+    
+    style Backend fill:#e3f2fd
+    style Database fill:#e8f5e9
+    style Deployment fill:#fff3e0
+    style Tools fill:#fce4ec
